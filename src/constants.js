@@ -1,0 +1,1 @@
+export const lolaLity_DB="db_name";
