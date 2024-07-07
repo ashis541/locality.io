@@ -1,8 +1,14 @@
-const asyncHandler=(requestHandler)=>{
-return (req,res,next)=>{
-    Promise.resolve(requestHandler(req,res,next)).catch((error)=>next(error))
-}
-}
+/**
+ * next is used for data modification in middleware 
+ */
+
+const asyncHandler = (requestHandler) => {
+  return (req, res, next) => {
+    Promise.resolve(requestHandler(req, res, next)).catch((error) =>
+      next(error)
+    );
+  };
+};
 
 // const asyncHandler = (fn) => async (req, res, next) => {
 //     try {
@@ -15,5 +21,4 @@ return (req,res,next)=>{
 //     }
 // }
 
-
-export {asyncHandler}
+export { asyncHandler };
