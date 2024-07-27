@@ -1,1 +1,1 @@
-export const lolaLity_DB="db_name";
+export const lolaLity_DB="locality_io";
