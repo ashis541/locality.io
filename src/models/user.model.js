@@ -29,9 +29,6 @@ const userSchema = new mongoose.Schema(
       type: String, // cloudinary url
       required: true,
     },
-    coverImage: {
-      type: String, // cloudinary url
-    },
     location: {
       type: Schema.Types.ObjectId,
       ref: "location",
@@ -62,7 +59,7 @@ userSchema.methods.isPasswordCorrect = async function (password) {
 };
 
 /**
- * generate JWT tokens 
+ * generate JWT tokens
  */
 userSchema.methods.generateAccessToken = function () {
   return jwt.sign(
