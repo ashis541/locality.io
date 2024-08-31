@@ -2,6 +2,7 @@ import mongoose, { Schema, Types } from "mongoose";
 import mongooseAggregatePaginate from "mongoose-aggregate-paginate-v2";
 const locationSchema = new Schema({
   UserLocation: {
+    locationId:"string",
     userId: "string",
     latitude: "float",
     longitude: "float",
