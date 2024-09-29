@@ -29,10 +29,6 @@ const userSchema = new mongoose.Schema(
       type: String, // cloudinary url
       required: true,
     },
-    location: {
-      type: Schema.Types.ObjectId,
-      ref: "location",
-    },
     password: {
       type: String,
       required: [true, "Password is required"],
@@ -92,4 +88,4 @@ userSchema.methods.generateRefreshToken = function () {
   );
 };
 
-export const user = mongoose.model("user", userSchema);
+export const User = mongoose.model("user", userSchema);

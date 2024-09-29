@@ -1,14 +1,14 @@
 import express from "express";
 import cookieParser from "cookie-parser";
 import cors from "cors"
-import { http } from "http";
-import { socketConfig } from "./config/socketIo.js";
+import http from "http"
+import { socketIo } from "./config/socketIo.js";
 
 const app = express()
 const server = http.createServer(app);
 
 // Initialize Socket.IO
-socketConfig(server);
+socketIo(server);
 
 app.use(cors({
     origin: process.env.CORS_ORIGIN,
@@ -25,6 +25,5 @@ app.use(cookieParser())
 import userRouter from "./routes/user.route.js";
 
 app.use("/api/v1/users",userRouter)
-
 
 export {app};

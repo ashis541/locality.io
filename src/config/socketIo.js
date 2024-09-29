@@ -1,7 +1,7 @@
 import { Server } from 'socket.io';
 
 let io;
-const socketConfig = (server) => {
+const socketIo = (server) => {
   io = new Server(server, {
     cors: {
       origin: "*", // Allow all origins; update this as needed
@@ -36,5 +36,4 @@ const getIo = () => {
   }
   return io;
 };
-
-module.exports = { socketConfig, getIo };
+export { socketIo, getIo };
