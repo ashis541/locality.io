@@ -2,7 +2,7 @@ import mongoose from "mongoose";
 import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
 
-const userSchema = new mongoose.Schema(
+const organizatinSchema = new mongoose.Schema(
   {
     username: {
       type: String,
@@ -47,7 +47,7 @@ const userSchema = new mongoose.Schema(
 /**
  * incrypt password
  */
-userSchema.pre("save", async function (next) {
+organizatinSchema.pre("save", async function (next) {
   if (!this.isModified("password")) return next();
   this.password = await bcrypt.hash(this.password, 10);
   next();
@@ -55,14 +55,14 @@ userSchema.pre("save", async function (next) {
 /**
  * password decrypted
  */
-userSchema.methods.isPasswordCorrect = async function (password) {
+organizatinSchema.methods.isPasswordCorrect = async function (password) {
   return await bcrypt.compare(password, this.password);
 };
 
 /**
  * generate JWT tokens
  */
-userSchema.methods.generateAccessToken = function () {
+organizatinSchema.methods.generateAccessToken = function () {
   return jwt.sign(
     {
       _id: this._id,
@@ -76,7 +76,7 @@ userSchema.methods.generateAccessToken = function () {
     }
   );
 };
-userSchema.methods.generateRefreshToken = function () {
+organizatinSchema.methods.generateRefreshToken = function () {
   return jwt.sign(
     {
       _id: this._id,
@@ -88,4 +88,4 @@ userSchema.methods.generateRefreshToken = function () {
   );
 };
 
-export const User = mongoose.model("user", userSchema);
+export const Organization = mongoose.model("Organization", organizatinSchema);
