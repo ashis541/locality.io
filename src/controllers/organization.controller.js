@@ -1,19 +1,19 @@
 import { asyncHandler } from "../utils/asyncHandler.js";
 import { ApiError } from "../utils/apiError.js";
 import { ApiResponse } from "../utils/apiResponse.js";
-import { User } from "../models/user.model.js";
+import { Organization } from "../models/organization.model.js";
 import {uploadOnCloudinary} from '../utils/cloudinary.js'
 import jwt from "jsonwebtoken";
 import mongoose from "mongoose";
 
 const generateAccessAndRefereshTokens = async (userId) => {
   try {
-    const user = await User.findById(userId);
-    const accessToken = user.generateAccessToken();
-    const refreshToken = user.generateRefreshToken();
+    const organization = await Organization.findById(userId);
+    const accessToken = organization.generateAccessToken();
+    const refreshToken = organization.generateRefreshToken();
 
-    user.refreshToken = refreshToken;
-    await user.save({ validateBeforeSave: false });
+    organization.refreshToken = refreshToken;
+    await organization.save({ validateBeforeSave: false });
 
     return { accessToken, refreshToken };
   } catch (error) {
@@ -36,7 +36,7 @@ const registerUser = asyncHandler(async (req, res) => {
   }
 
   //check if user is exist or not
-  const existedUser = await User.findOne({
+  const existedUser = await Organization.findOne({
     $or: [{ username }, { email }],
   });
   if (existedUser) {
@@ -52,7 +52,7 @@ const registerUser = asyncHandler(async (req, res) => {
     throw new ApiError(400, "Avatar file is required");
   }
   //save the record into the data base
-  const user = await User.create({
+  const user = await Organization.create({
     fullName,
     avatar: avatar.url,
     email,
@@ -61,7 +61,7 @@ const registerUser = asyncHandler(async (req, res) => {
     userType: userType.toLowerCase(),
   });
 
-  const createdUser = await User.findById(user._id).select(
+  const createdUser = await Organization.findById(user._id).select(
     "-password -refreshToken"
   );
 
@@ -82,7 +82,7 @@ const loginUser = asyncHandler(async (req, res) => {
   if (!username && !email) {
     throw new ApiError(400, "username or email is required");
   }
-  const user = await User.findOne({
+  const user = await Organization.findOne({
     $or: [{ username }, { email }],
   });
 
@@ -100,7 +100,7 @@ const loginUser = asyncHandler(async (req, res) => {
     user._id
   );
 
-  const loggedInUser = await User.findById(user._id).select(
+  const loggedInUser = await Organization.findById(user._id).select(
     "-password -refreshToken"
   );
 
@@ -127,7 +127,7 @@ const loginUser = asyncHandler(async (req, res) => {
 });
 
 const logoutUser = asyncHandler(async (req, res) => {
-  await User.findByIdAndUpdate(
+  await Organization.findByIdAndUpdate(
     req.user._id,
     {
       $unset: {
@@ -166,13 +166,13 @@ const refreshAccessToken = asyncHandler(async (req, res) => {
       process.env.REFRESH_TOKEN_SECRET
     );
 
-    const user = await User.findById(decodedToken?._id);
+    const org = await Organization.findById(decodedToken?._id);
 
-    if (!user) {
+    if (!org) {
       throw new ApiError(401, "Invalid refresh token");
     }
 
-    if (incomingRefreshToken !== user?.refreshToken) {
+    if (incomingRefreshToken !== org?.refreshToken) {
       throw new ApiError(401, "Refresh token is expired or used");
     }
 
@@ -182,7 +182,7 @@ const refreshAccessToken = asyncHandler(async (req, res) => {
     };
 
     const { accessToken, newRefreshToken } =
-      await generateAccessAndRefereshTokens(user._id);
+      await generateAccessAndRefereshTokens(org._id);
 
     return res
       .status(200)
