@@ -4,8 +4,6 @@ import { ApiResponse } from "../utils/apiResponse.js";
 import { Organization } from "../models/organization.model.js";
 import {uploadOnCloudinary} from '../utils/cloudinary.js'
 import jwt from "jsonwebtoken";
-import mongoose from "mongoose";
-
 const generateAccessAndRefereshTokens = async (userId) => {
   try {
     const organization = await Organization.findById(userId);
@@ -74,11 +72,8 @@ const registerUser = asyncHandler(async (req, res) => {
     .status(201)
     .json(new ApiResponse(200, createdUser, "User registered Successfully"));
 });
-
 const loginUser = asyncHandler(async (req, res) => {
   const { email, username, password } = req.body;
-  console.log(email);
-
   if (!username && !email) {
     throw new ApiError(400, "username or email is required");
   }
@@ -125,7 +120,6 @@ const loginUser = asyncHandler(async (req, res) => {
       )
     );
 });
-
 const logoutUser = asyncHandler(async (req, res) => {
   await Organization.findByIdAndUpdate(
     req.user._id,
@@ -150,8 +144,6 @@ const logoutUser = asyncHandler(async (req, res) => {
     .clearCookie("refreshToken", options)
     .json(new ApiResponse(200, {}, "User logged Out"));
 });
-
-
 const refreshAccessToken = asyncHandler(async (req, res) => {
   const incomingRefreshToken =
     req.cookies.refreshToken || req.body.refreshToken;
@@ -199,7 +191,6 @@ const refreshAccessToken = asyncHandler(async (req, res) => {
     throw new ApiError(401, error?.message || "Invalid refresh token");
   }
 });
-
 export { 
    registerUser,
    loginUser,

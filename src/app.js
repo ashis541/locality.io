@@ -23,7 +23,8 @@ app.use(cookieParser())
 
 //import routes
 import organization from "./routes/organization.route.js";
-
+import branches from "./routes/branches.route.js"
 app.use("/api/v1/users",organization)
+app.use("/api/v1/organization/branch",branches)
 
 export {app};

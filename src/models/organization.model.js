@@ -25,6 +25,10 @@ const organizatinSchema = new mongoose.Schema(
       trim: true,
       index: true,
     },
+    branches: [{
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Branch',
+    }],
     // avatar: {
     //   type: String, // cloudinary url
     //   required: true,
