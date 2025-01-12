@@ -21,7 +21,6 @@ const generateAccessAndRefereshTokens = async (userId) => {
     );
   }
 };
-
 const registerUser = asyncHandler(async (req, res) => {
   // getting input values from the body
   const { fullName, email, username, password, userType } = req.body;
