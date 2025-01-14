@@ -16,7 +16,7 @@ const organizationSchema = new mongoose.Schema(
       type: String,
       required: true,
       unique: true,
-      lowecase: true,
+      lowercase: true,
       trim: true,
     },
     fullName: {
@@ -25,10 +25,6 @@ const organizationSchema = new mongoose.Schema(
       trim: true,
       index: true,
     },
-    branches: [{
-      type: mongoose.Schema.Types.ObjectId,
-      ref: 'Branch',
-    }],
     // avatar: {
     //   type: String, // cloudinary url
     //   required: true,
@@ -62,7 +58,6 @@ organizationSchema.pre("save", async function (next) {
 organizationSchema.methods.isPasswordCorrect = async function (password) {
   return await bcrypt.compare(password, this.password);
 };
-
 /**
  * generate JWT tokens
  */
@@ -91,5 +86,4 @@ organizationSchema.methods.generateRefreshToken = function () {
     }
   );
 };
-
 export const Organization = mongoose.model("Organization", organizationSchema);
