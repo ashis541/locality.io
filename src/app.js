@@ -24,7 +24,10 @@ app.use(cookieParser())
 //import routes
 import organization from "./routes/organization.route.js";
 import branches from "./routes/branches.route.js"
+import mail from './routes/mail.route.js'
 app.use("/api/v1/users",organization)
 app.use("/api/v1/organization/branch",branches)
+app.use("api/v1/mail",mail)
+
 
 export {app};

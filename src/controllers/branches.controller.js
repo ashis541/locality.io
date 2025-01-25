@@ -56,12 +56,7 @@ const getAllBranch = asyncHandler(async (req, res) => {
       // Send the response with the branches
       return res.status(200).json(new ApiResponse(200, branches, "All branches retrieved successfully"));
     } catch (error) {
-      // Handle errors more explicitly
-      console.error('Error fetching branches:', error);
-      return res.status(500).json({
-        success: false,
-        message: 'Server Error: ' + error.message,  // Providing more detailed error message
-      });
+      throw new ApiError(500, error?.message || "server error");
     }
   });
 

@@ -23,9 +23,9 @@ const generateAccessAndRefereshTokens = async (userId) => {
 };
 const registerUser = asyncHandler(async (req, res) => {
   // getting input values from the body
-  const { fullName, email, username, password, userType } = req.body;
+  const { fullName, email, username, password } = req.body;
   if (
-    [fullName, email, username, password, userType].some(
+    [fullName, email, username, password].some(
       (field) => field?.trim() === ""
     )
   ) {
@@ -55,7 +55,6 @@ const registerUser = asyncHandler(async (req, res) => {
     email,
     password,
     username: username.toLowerCase(),
-    userType: userType.toLowerCase(),
   });
 
   const createdUser = await Organization.findById(user._id).select(
