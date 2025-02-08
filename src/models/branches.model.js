@@ -21,6 +21,24 @@ const branchSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  password:{
+    type:String,
+    required:true
+  },
+  productsCategories:[{
+    type:mongoose.Schema.ObjectId,
+    ref:'categories'
+  }],
+  employes:[{
+    type:mongoose.Schema.ObjectId,
+    ref:"employes"
+  }],
+  sales:[
+    {
+      type:mongoose.Schema.ObjectId,
+      ref:"sales",
+    }
+  ],
   organizaton: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "Organization",
