@@ -21,10 +21,28 @@ const branchSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  organization: {
+  password:{
+    type:String,
+    required:true
+  },
+  productsCategories:[{
+    type:mongoose.Schema.ObjectId,
+    ref:'categories'
+  }],
+  employes:[{
+    type:mongoose.Schema.ObjectId,
+    ref:"employes"
+  }],
+  sales:[
+    {
+      type:mongoose.Schema.ObjectId,
+      ref:"sales",
+    }
+  ],
+  organizaton: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'Organization',
-    required: true,
+    ref: "Organization",
+    required:true
   },
   createdAt: {
     type: Date,
@@ -33,5 +51,4 @@ const branchSchema = new mongoose.Schema({
 });
 // Add the plugin to the schema
 branchSchema.plugin(mongooseAggregatePaginate);
-const Branch = mongoose.model('Branch', branchSchema);
-module.exports = { Branch };
+export const Branch = mongoose.model('Branch', branchSchema);

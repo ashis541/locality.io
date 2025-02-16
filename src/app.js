@@ -22,10 +22,17 @@ app.use(express.static("public"))
 app.use(cookieParser())
 
 //import routes
-import userRouter from "./routes/user.route.js";
-import { location } from "./routes/location.router.js";
+import organization from "./routes/organization.routes.js";
+import branches from "./routes/branches.routes.js"
+import mail from './routes/mail.routes.js'
+import categories from './routes/categories.routes.js'
+import product from './routes/products.routes.js'
 
-app.use("/api/v1/users",userRouter)
-app.use("/api/v1/users",location)
+app.use("/api/v1/users",organization)
+app.use("/api/v1/organization/branch",branches)
+app.use("api/v1/mail",mail)
+app.use("api/v1/categories",categories)
+app.use("api/v1/product",product)
+
 
 export {app};
