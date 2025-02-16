@@ -2,7 +2,7 @@ import mongoose from "mongoose";
 import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
 
-const organizatinSchema = new mongoose.Schema(
+const organizationSchema = new mongoose.Schema(
   {
     username: {
       type: String,
@@ -11,58 +11,68 @@ const organizatinSchema = new mongoose.Schema(
       lowercase: true,
       trim: true,
       index: true,
+      minlength: [3, "Username must be at least 3 characters"],
+      maxlength: [20, "Username cannot exceed 20 characters"],
     },
     email: {
       type: String,
       required: true,
       unique: true,
-      lowecase: true,
+      lowercase: true,
       trim: true,
+      validate: {
+        validator: function (v) {
+          return /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/.test(v);
+        },
+        message: (props) => `${props.value} is not a valid email!`,
+      },
     },
     fullName: {
       type: String,
       required: true,
       trim: true,
       index: true,
-    },
-    avatar: {
-      type: String, // cloudinary url
-      required: true,
+      minlength: [2, "Full name must be at least 2 characters"],
     },
     password: {
       type: String,
       required: [true, "Password is required"],
+      validate: {
+        validator: function (v) {
+          return /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*]).{8,}$/.test(
+            v
+          );
+        },
+        message:
+          "Password must be at least 8 characters, include uppercase, lowercase, number, and special character",
+      },
     },
     refreshToken: {
       type: String,
     },
-    userType: {
-      type: String,
-      required: true,
-      trim: true,
-    },
+    branches: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Branch",
+      },
+    ],
   },
   { timestamps: true }
 );
-/**
- * incrypt password
- */
-organizatinSchema.pre("save", async function (next) {
+// Password hashing middleware
+organizationSchema.pre("save", async function (next) {
   if (!this.isModified("password")) return next();
   this.password = await bcrypt.hash(this.password, 10);
   next();
 });
-/**
- * password decrypted
- */
-organizatinSchema.methods.isPasswordCorrect = async function (password) {
+
+// Password validation method
+organizationSchema.methods.isPasswordCorrect = async function (password) {
   return await bcrypt.compare(password, this.password);
 };
 
-/**
- * generate JWT tokens
- */
-organizatinSchema.methods.generateAccessToken = function () {
+// Token generation methods
+organizationSchema.methods.generateAccessToken = function () {
   return jwt.sign(
     {
       _id: this._id,
@@ -76,7 +86,7 @@ organizatinSchema.methods.generateAccessToken = function () {
     }
   );
 };
-organizatinSchema.methods.generateRefreshToken = function () {
+organizationSchema.methods.generateRefreshToken = function () {
   return jwt.sign(
     {
       _id: this._id,
@@ -88,4 +98,10 @@ organizatinSchema.methods.generateRefreshToken = function () {
   );
 };
 
-export const Organization = mongoose.model("Organization", organizatinSchema);
+// Method to invalidate refresh token
+organizationSchema.methods.invalidateRefreshToken = function() {
+  this.refreshToken = null;
+  return this.save();
+};
+
+export const Organization = mongoose.model("Organization", organizationSchema);

@@ -4,8 +4,6 @@ import { ApiResponse } from "../utils/apiResponse.js";
 import { Organization } from "../models/organization.model.js";
 import {uploadOnCloudinary} from '../utils/cloudinary.js'
 import jwt from "jsonwebtoken";
-import mongoose from "mongoose";
-
 const generateAccessAndRefereshTokens = async (userId) => {
   try {
     const organization = await Organization.findById(userId);
@@ -23,12 +21,11 @@ const generateAccessAndRefereshTokens = async (userId) => {
     );
   }
 };
-
 const registerUser = asyncHandler(async (req, res) => {
   // getting input values from the body
-  const { fullName, email, username, password, userType } = req.body;
+  const { fullName, email, username, password } = req.body;
   if (
-    [fullName, email, username, password, userType].some(
+    [fullName, email, username, password].some(
       (field) => field?.trim() === ""
     )
   ) {
@@ -43,22 +40,21 @@ const registerUser = asyncHandler(async (req, res) => {
     throw new ApiError(409, "User with email or username already exists");
   }
   //handeling upload images
-  const avatarLocalPath = req.files?.avatar[0]?.path;
-  if (!avatarLocalPath) {
-    throw new ApiError(400, "Avatar file is required");
-  }
-  const avatar = await uploadOnCloudinary(avatarLocalPath);
-  if (!avatar) {
-    throw new ApiError(400, "Avatar file is required");
-  }
+  // const avatarLocalPath = req.files?.avatar[0]?.path;
+  // if (!avatarLocalPath) {
+  //   throw new ApiError(400, "Avatar file is required");
+  // }
+  // const avatar = await uploadOnCloudinary(avatarLocalPath);
+  // if (!avatar) {
+  //   throw new ApiError(400, "Avatar file is required");
+  // }
   //save the record into the data base
   const user = await Organization.create({
     fullName,
-    avatar: avatar.url,
+    // avatar: avatar.url,
     email,
     password,
     username: username.toLowerCase(),
-    userType: userType.toLowerCase(),
   });
 
   const createdUser = await Organization.findById(user._id).select(
@@ -74,11 +70,8 @@ const registerUser = asyncHandler(async (req, res) => {
     .status(201)
     .json(new ApiResponse(200, createdUser, "User registered Successfully"));
 });
-
 const loginUser = asyncHandler(async (req, res) => {
   const { email, username, password } = req.body;
-  console.log(email);
-
   if (!username && !email) {
     throw new ApiError(400, "username or email is required");
   }
@@ -125,7 +118,6 @@ const loginUser = asyncHandler(async (req, res) => {
       )
     );
 });
-
 const logoutUser = asyncHandler(async (req, res) => {
   await Organization.findByIdAndUpdate(
     req.user._id,
@@ -150,8 +142,6 @@ const logoutUser = asyncHandler(async (req, res) => {
     .clearCookie("refreshToken", options)
     .json(new ApiResponse(200, {}, "User logged Out"));
 });
-
-
 const refreshAccessToken = asyncHandler(async (req, res) => {
   const incomingRefreshToken =
     req.cookies.refreshToken || req.body.refreshToken;
@@ -199,7 +189,6 @@ const refreshAccessToken = asyncHandler(async (req, res) => {
     throw new ApiError(401, error?.message || "Invalid refresh token");
   }
 });
-
 export { 
    registerUser,
    loginUser,
