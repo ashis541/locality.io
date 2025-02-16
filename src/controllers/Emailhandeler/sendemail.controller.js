@@ -1,10 +1,10 @@
 import nodemailer from 'nodemailer';
 import { google } from 'googleapis';
 import { Organization } from '../../models/organization.model.js';
-import { Branch } from '../../models/branch.model.js';
+import { Branch } from '../../models/branches.model.js';
 import { ApiError } from '../../utils/apiError.js';
 import { ApiResponse } from '../../utils/apiResponse.js';
-import { asyncHandler } from '../../utils/asyncHandler.jss';
+import { asyncHandler } from '../../utils/asyncHandler.js';
 import { createEmailTemplate } from '../../utils/emailtemplate.js';
 
 const oauth2Client = new google.auth.OAuth2(

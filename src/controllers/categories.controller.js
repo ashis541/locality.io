@@ -1,5 +1,5 @@
-import { Categories } from "../models/Categories.js";
-import { Products } from "../models/Products.js";
+import { Categories } from "../models/categories.model.js";
+import { Products } from "../models/products.model.js";
 import { ApiResponse } from "../utils/apiResponse.js";
 import { ApiError } from "../utils/apiError.js";
 
