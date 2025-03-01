@@ -1,16 +1,22 @@
 import mongoose from "mongoose";
-import mongooseAggregatePaginate from "mongoose-aggregate-paginate-v2";
+// import mongooseAggregatePaginate from "mongoose-aggregate-paginate-v2";
 // Sales Schema
 const saleSchema = new mongoose.Schema({
-  totalSale: {
-    type: Number,
+  branchId: {
+    type: mongoose.Schema.ObjectId,
     required: true,
+    ref:'Branches'
   },
-  Date: {
+  salesDate: {
     type: Date,
     default: Date.now,
   },
+  amount:{
+    type:Number,
+    required:true,
+
+  },
 });
 // Add the plugin to the schema
-saleSchema.plugin(mongooseAggregatePaginate);
+// saleSchema.plugin(mongooseAggregatePaginate);
 export const Sales = mongoose.model('Sales', saleSchema);

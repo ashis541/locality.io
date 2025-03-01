@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import mongooseAggregatePaginate from "mongoose-aggregate-paginate-v2";
+// import mongooseAggregatePaginate from "mongoose-aggregate-paginate-v2";
 
 // Categories Schema
 const categoriesSchema = new mongoose.Schema({
@@ -13,5 +13,5 @@ const categoriesSchema = new mongoose.Schema({
   }],
 });
 // Add the plugin to the schema
-categoriesSchema.plugin(mongooseAggregatePaginate);
+// categoriesSchema.plugin(mongooseAggregatePaginate);
 export const Categories = mongoose.model("Categories", categoriesSchema);

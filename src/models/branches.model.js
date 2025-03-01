@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import mongooseAggregatePaginate from "mongoose-aggregate-paginate-v2";
+// import mongooseAggregatePaginate from "mongoose-aggregate-paginate-v2";
 // Branch Schema
 const branchSchema = new mongoose.Schema({
   name: {
@@ -50,5 +50,5 @@ const branchSchema = new mongoose.Schema({
   },
 });
 // Add the plugin to the schema
-branchSchema.plugin(mongooseAggregatePaginate);
+// branchSchema.plugin(mongooseAggregatePaginate);
 export const Branch = mongoose.model('Branch', branchSchema);
