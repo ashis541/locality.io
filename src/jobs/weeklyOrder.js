@@ -36,4 +36,4 @@ async function updateWeeklyOrders() {
     }
 }
 
-module.exports = updateWeeklyOrders;
+export default updateWeeklyOrders;

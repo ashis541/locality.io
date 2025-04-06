@@ -5,6 +5,6 @@ import { createNewBranch,getAllBranch} from '../controllers/branches.controller.
 const routes = new Router();
 
 routes.route("/createbranch").post(verifyJWT,createNewBranch)
-routes.route("/getallBranch").get(verifyJWT,getAllBranch)
+routes.route("/getallbranch").get(verifyJWT,getAllBranch)
 
 export default routes

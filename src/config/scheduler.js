@@ -1,6 +1,6 @@
-import {cron} from 'node-cron'
-import {updateMonthlyOrders} from '../jobs/monthlyOrder.js'
-import { updateWeeklyOrders } from '../jobs/weeklyOrder.js'
+import cron from 'node-cron'
+import updateMonthlyOrders from '../jobs/monthlyOrder.js'
+import updateWeeklyOrders  from '../jobs/weeklyOrder.js'
 
 function scheduler() {
     console.log("✅ Cron jobs scheduled!");
@@ -14,4 +14,4 @@ function scheduler() {
     });
 }
 
-module.exports = scheduler;
+export default scheduler;

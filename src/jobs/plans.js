@@ -1,5 +1,5 @@
 // Hardcoded Plans (Industry Standard Response Format)
-import { ApiResponse } from "../utils/apiResponse";
+import { ApiResponse } from "../utils/apiResponse.js";
  const plans = [
     {
         planName: "basic",
@@ -25,11 +25,11 @@ import { ApiResponse } from "../utils/apiResponse";
 ];
 
 // Get All Plans API
-exports.getAllPlans = (req, res) => {
+export const getAllPlans = (req, res) => {
     res.status(200).json(new ApiResponse(200, plans, "All plans details"));
 };
 
 // Helper to get plan by id
-exports.getPlanById = (planId) => {
+export const getPlanById = (planId) => {
     return plans.find(plan => plan.planId === planId.toLowerCase());
 };

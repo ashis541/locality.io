@@ -2,7 +2,7 @@ import express from "express";
 import cookieParser from "cookie-parser";
 import cors from "cors"
 import http from "http"
-import { scheduler } from "./config/scheduler.js";
+import scheduler  from "./config/scheduler.js";
 import { socketIo } from "./config/socketIo.js";
 
 const app = express()

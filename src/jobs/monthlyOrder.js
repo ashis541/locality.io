@@ -36,4 +36,4 @@ async function updateMonthlyOrders() {
     }
 }
 
-module.exports = updateMonthlyOrders;
+export default updateMonthlyOrders;
