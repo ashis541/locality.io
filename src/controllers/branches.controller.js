@@ -2,11 +2,12 @@ import { ApiResponse } from "../utils/apiResponse.js";
 import { ApiError } from "../utils/apiError.js";
 import { asyncHandler } from "../utils/asyncHandler.js";
 import { Branch } from "../models/branches.model.js";
+import { Organization } from "../models/organization.model.js";
 import mongoose from "mongoose";
 
 //create a new branch
 const createNewBranch = asyncHandler(async (req, res) => {
-  const { name, address, phoneNumber, email } = req.body;
+  const { name, address, phoneNumber, email,organizaton} = req.body;
   // Validate required fields
   if (!name || !email || !phoneNumber) {
     throw new ApiError(400, "All fields are required");
@@ -18,7 +19,20 @@ const createNewBranch = asyncHandler(async (req, res) => {
       address,
       phoneNumber,
       email,
+      organizaton,
     });
+
+    // Update Organization to add this Branch ID
+    const updatedOrganization = await Organization.findByIdAndUpdate(
+      organizaton, // organization id
+      { $push: { branches: newBranch._id } }, // push new branch ID into branches array
+      { new: true } // return the updated document
+    );
+
+    if (!updatedOrganization) {
+      throw new ApiError(404, "Organization not found");
+    }
+
     return res
       .status(201)
       .json(new ApiResponse(200, newBranch, "User registered Successfully"));
