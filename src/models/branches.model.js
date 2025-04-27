@@ -39,9 +39,9 @@ const branchSchema = new mongoose.Schema({
       ref:"sales",
     }
   ],
-  organizaton: {
+  organisation: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: "Organization",
+    ref: "Organisation",
     required:true
   },
   createdAt: {

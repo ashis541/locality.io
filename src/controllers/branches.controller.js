@@ -7,7 +7,7 @@ import mongoose from "mongoose";
 
 //create a new branch
 const createNewBranch = asyncHandler(async (req, res) => {
-  const { name, address, phoneNumber, email,organizaton} = req.body;
+  const { name, address, phoneNumber, password,email,organisation} = req.body;
   // Validate required fields
   if (!name || !email || !phoneNumber) {
     throw new ApiError(400, "All fields are required");
@@ -17,14 +17,15 @@ const createNewBranch = asyncHandler(async (req, res) => {
     const newBranch = await Branch.create({
       name,
       address,
+      password,
       phoneNumber,
       email,
-      organizaton,
+      organisation,
     });
 
     // Update Organization to add this Branch ID
     const updatedOrganization = await Organization.findByIdAndUpdate(
-      organizaton, // organization id
+      organisation, // organization id
       { $push: { branches: newBranch._id } }, // push new branch ID into branches array
       { new: true } // return the updated document
     );
@@ -43,32 +44,14 @@ const createNewBranch = asyncHandler(async (req, res) => {
 // Fetch all branches
 const getAllBranch = asyncHandler(async (req, res) => {
     try {
-      // Pagination options from query parameters (default to page 1 and limit 10)
-      const options = {
-        page: parseInt(req.query.page) || 1,
-        limit: parseInt(req.query.limit) || 10,
-      };
-  
-      // Optional filter: Retrieve branches for a specific organization
-      let filter = {};
-
-      if (req.query.organization) {
-        // Validate ObjectId format for organization
-        if (mongoose.Types.ObjectId.isValid(req.query.organization)) {
-          filter.organization = req.query.organization; // Set organization filter
-        } else {
-          // Handle invalid ObjectId gracefully, leaving filter empty
-          console.warn('Invalid organization ObjectId provided');
-        }
+      const organizationId = req.params.organizationId; // Get organization ID from request parameters
+      if (!organizationId) {
+        return res.status(400).json({ message: "organizationId is required" });
       }
-  
-      // Fetch branches with pagination and filtering
-      console.log(filter);
-      
-      const branches = await Branch.aggregatePaginate(Branch.aggregate([]), options, options);
+      const allBranch = await Branch.find({ organisation: organizationId }).select('name email address');; // Fetch branches for the specified organization
   
       // Send the response with the branches
-      return res.status(200).json(new ApiResponse(200, branches, "All branches retrieved successfully"));
+      return res.status(200).json(new ApiResponse(200, allBranch, "All branches retrieved successfully"));
     } catch (error) {
       throw new ApiError(500, error?.message || "server error");
     }
